@@ -96,6 +96,22 @@
     /* Mobile drawer (hidden by default, slides in) */
     #mobile-drawer { transition: transform 250ms ease-in-out; }
     #mobile-drawer.open { transform: translateX(0) !important; }
+    @media (max-width: 768px) {
+        /* Prevent table headers/values from collapsing into vertical single-letters by forcing horizontal scroll */
+        .overflow-x-auto table, .overflow-x-auto thead, .overflow-x-auto tbody, .overflow-x-auto tr { white-space: nowrap; }
+        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; overflow: visible; }
+        /* increase bottom padding so mobile bottom nav doesn't cover content */
+        main { padding-bottom: 110px; }
+        /* hide large watermark on small screens */
+        .watermark { display: none !important; }
+        /* make mobile drawer full height and comfortable width */
+        #mobile-drawer { width: 86%; transform: translateX(-100%); }
+        #mobile-drawer.open { transform: translateX(0); }
+        /* ensure bottom nav fits */
+        #mobile-bottom-nav > div { max-width: calc(100vw - 24px); }
+        /* increase table cell padding on mobile for readability */
+        .overflow-x-auto td, .overflow-x-auto th { padding: 12px !important; }
+    }
     </style>
 </head>
 <body class="antialiased min-h-screen flex">
