@@ -87,6 +87,8 @@
     }
     /* Mobile improvements */
     @media (max-width: 768px) {
+        /* Allow normal document flow on small screens so body/html handle scrolling */
+        body { display: block; }
         .overflow-x-auto { -webkit-overflow-scrolling: touch; }
         .tab-content { padding-bottom: 1rem; }
         #mobile-bottom-nav { padding-bottom: env(safe-area-inset-bottom); }
@@ -1414,7 +1416,7 @@
 
             <!-- Global Search Modal -->
             <div id="global-search-modal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm flex justify-center items-start pt-20 z-50 hidden">
-                <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl w-full max-w-3xl max-h-[70vh] overflow-hidden flex flex-col shadow-2xl mx-4">
+                <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl w-full max-w-3xl flex flex-col shadow-2xl mx-4">
                     <div class="p-4 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
                         <span class="font-bold text-sm text-slate-800 dark:text-white" data-i18n="search-modal-title">نتائج البحث الشامل</span>
                         <button id="close-search-modal" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
