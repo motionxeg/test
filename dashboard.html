@@ -111,6 +111,8 @@
         #mobile-bottom-nav > div { max-width: calc(100vw - 24px); }
         /* increase table cell padding on mobile for readability */
         .overflow-x-auto td, .overflow-x-auto th { padding: 12px !important; }
+        /* ensure horizontal writing and normal text flow */
+        .overflow-x-auto th, .overflow-x-auto td { writing-mode: horizontal-tb !important; transform: none !important; display: table-cell !important; }
     }
     </style>
 </head>
@@ -938,14 +940,14 @@
             <div id="tab-reports" class="tab-content space-y-6">
                 <div class="flex justify-between items-center border-b border-gray-200 dark:border-slate-800 pb-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800 dark:text-white" id="reports-main-title">التقارير الشاملة وتقفيل الحسابات</h2>
-                        <p class="text-sm text-slate-500 mt-0.5" id="reports-main-sub">توليد وتصدير تقارير تصفية الملاك والعملاء، أو تقرير تقفيل الشركة المالي</p>
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white" id="reports-main-title" data-i18n="reports-title">التقارير الشاملة وتقفيل الحسابات</h2>
+                        <p class="text-sm text-slate-500 mt-0.5" id="reports-main-sub" data-i18n="reports-sub">توليد وتصدير تقارير تصفية الملاك والعملاء، أو تقرير تقفيل الشركة المالي</p>
                     </div>
                 </div>
 
                 <!-- Report Type Selector -->
                 <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm max-w-md">
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">اختر نوع التقرير المطلوب</label>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1" data-i18n="lbl-report-filter">اختر نوع التقرير المطلوب</label>
                     <select id="report-type-select" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:border-blue-500 font-semibold">
                         <option value="settlement">تصفية وتقفيل حساب الملاك والعملاء (Settlement)</option>
                         <option value="company-closing">تقفيل الشركة المالي الشامل (Company Closing)</option>
@@ -955,27 +957,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="report-filter-box">
                     <!-- Right: Search options -->
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-4">
-                        <h3 class="font-bold text-slate-700 dark:text-slate-300 text-sm border-b border-gray-100 dark:border-slate-800 pb-2">خيارات التصفية والفترة</h3>
+                                <h3 class="font-bold text-slate-700 dark:text-slate-300 text-sm border-b border-gray-100 dark:border-slate-800 pb-2" data-i18n="lbl-report-filter">خيارات التصفية والفترة</h3>
                         
                         <div class="space-y-3">
                             <!-- Settlement Report Fields -->
                             <div id="report-settlement-fields" class="space-y-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">نوع الحساب</label>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1" data-i18n="lbl-report-target-type">نوع الحساب</label>
                                     <select id="report-target-type" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none">
-                                        <option value="owner">صاحب العربية (مالك)</option>
-                                        <option value="customer">العميل (المستأجر)</option>
+                                        <option value="owner" data-i18n="opt-report-owner">صاحب العربية (مالك)</option>
+                                        <option value="customer" data-i18n="opt-report-customer">العميل (المستأجر)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">اختر الشخص المسؤول</label>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1" data-i18n="lbl-report-select-entity">اختر الشخص المسؤول</label>
                                     <select id="report-entity-select" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none">
                                     </select>
                                 </div>
                                 <div id="div-report-car-filter">
                                     <label class="block text-xs font-semibold text-slate-500 mb-1">تحديد سيارة معينة (اختياري)</label>
                                     <select id="report-car-select" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none">
-                                        <option value="">-- كل سيارات المالك --</option>
+                                        <option value="" data-i18n="opt-report-all-cars">-- كل سيارات المالك --</option>
                                     </select>
                                 </div>
                             </div>
@@ -983,16 +985,16 @@
                             <!-- Shared Date Fields -->
                             <div class="grid grid-cols-2 gap-2 border-t border-gray-100 dark:border-slate-800 pt-2">
                                 <div>
-                                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">من تاريخ</label>
+                                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="lbl-report-start-date">من تاريخ</label>
                                     <input type="text" id="report-start-date" class="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs focus:outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">إلى تاريخ</label>
+                                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="lbl-report-end-date">إلى تاريخ</label>
                                     <input type="text" id="report-end-date" class="w-full px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-xs focus:outline-none">
                                 </div>
                             </div>
 
-                            <button id="btn-generate-report" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/10 mt-2">عرض وتوليد التقرير</button>
+                            <button id="btn-generate-report" data-i18n="btn-generate-report-txt" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors shadow-lg shadow-blue-500/10 mt-2">عرض وتوليد التقرير</button>
                         </div>
                     </div>
 
