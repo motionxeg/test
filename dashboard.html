@@ -957,8 +957,8 @@
                 <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm max-w-md">
                     <label class="block text-xs font-semibold text-slate-500 mb-1" data-i18n="lbl-report-filter">اختر نوع التقرير المطلوب</label>
                     <select id="report-type-select" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:border-blue-500 font-semibold">
-                        <option value="settlement">تصفية وتقفيل حساب الملاك والعملاء (Settlement)</option>
-                        <option value="company-closing">تقفيل الشركة المالي الشامل (Company Closing)</option>
+                        <option value="settlement" data-i18n="opt-report-settlement">تصفية وتقفيل حساب الملاك والعملاء (Settlement)</option>
+                        <option value="company-closing" data-i18n="opt-report-company-closing">تقفيل الشركة المالي الشامل (Company Closing)</option>
                     </select>
                 </div>
 
@@ -983,7 +983,7 @@
                                     </select>
                                 </div>
                                 <div id="div-report-car-filter">
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">تحديد سيارة معينة (اختياري)</label>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1" data-i18n="lbl-report-car-filter">تحديد سيارة معينة (اختياري)</label>
                                     <select id="report-car-select" class="w-full px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none">
                                         <option value="" data-i18n="opt-report-all-cars">-- كل سيارات المالك --</option>
                                     </select>
@@ -1944,6 +1944,29 @@
                     const key = element.getAttribute('data-i18n');
                     if (translations[lang] && translations[lang][key]) element.innerText = translations[lang][key];
                 });
+
+                // Ensure report-type select options follow language even if translation keys are missing
+                try {
+                    const reportOptionLabels = {
+                        ar: {
+                            settlement: 'تصفية وتقفيل حساب الملاك والعملاء (Settlement)',
+                            'company-closing': 'تقفيل الشركة المالي الشامل (Company Closing)'
+                        },
+                        en: {
+                            settlement: 'Settlement & Owner Statement',
+                            'company-closing': 'Company Closing (Full Financial)'
+                        }
+                    };
+                    const rptType = document.getElementById('report-type-select');
+                    if (rptType && reportOptionLabels[lang]) {
+                        const optSet = rptType.querySelector('option[value="settlement"]');
+                        const optComp = rptType.querySelector('option[value="company-closing"]');
+                        if (optSet) optSet.innerText = reportOptionLabels[lang].settlement;
+                        if (optComp) optComp.innerText = reportOptionLabels[lang]['company-closing'];
+                    }
+                } catch (e) {
+                    console.warn('applyLanguage: failed to set report-type option labels', e);
+                }
 
                 // Ensure specific report elements are updated even if they were set dynamically
                 try {
