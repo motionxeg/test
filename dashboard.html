@@ -265,6 +265,8 @@
             <button data-tab="settings" class="tab-btn flex items-center text-white p-3 rounded-lg hover:bg-slate-800"><i class="fa-solid fa-gear ml-3"></i><span>الإعدادات</span></button>
         </nav>
     </div>
+    <!-- Backdrop for mobile drawer -->
+    <div id="mobile-drawer-backdrop" class="hidden md:hidden fixed inset-0 bg-black/40 z-40"></div>
 
     <div class="flex-1 flex flex-col overflow-y-auto">
         
@@ -1005,8 +1007,8 @@
                     <!-- Left: Settlement Preview Area -->
                     <div id="report-settlement-preview-box" class="md:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm p-6 flex flex-col justify-between">
                         <div class="border-b border-gray-100 dark:border-slate-800 pb-3">
-                            <h4 id="report-results-title" class="font-bold text-slate-800 dark:text-white text-base">الملخص المالي الفوري للمعاينة</h4>
-                            <p class="text-xs text-slate-400 mt-0.5">انظر أدناه للمعاينة، وبإمكانك الضغط على أزرار التصدير أو الطباعة لتوليد التقرير.</p>
+                            <h4 id="report-results-title" class="font-bold text-slate-800 dark:text-white text-base" data-i18n="reports-preview-title">الملخص المالي الفوري للمعاينة</h4>
+                                <p class="text-xs text-slate-400 mt-0.5" data-i18n="reports-preview-desc">انظر أدناه للمعاينة، وبإمكانك الضغط على أزرار التصدير أو الطباعة لتوليد التقرير.</p>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4 my-6">
@@ -1026,10 +1028,10 @@
 
                         <div class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-slate-800">
                             <div class="flex space-x-2 space-x-reverse">
-                                <button type="button" id="btn-settle-excel" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all"><i class="fa-solid fa-file-excel ml-1"></i>Excel</button>
-                                <button type="button" id="btn-settle-pdf" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all"><i class="fa-solid fa-file-pdf ml-1"></i>PDF</button>
+                                <button type="button" id="btn-settle-excel" data-i18n="btn-settle-excel" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all"><i class="fa-solid fa-file-excel ml-1"></i>Excel</button>
+                                <button type="button" id="btn-settle-pdf" data-i18n="btn-settle-pdf" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition-all"><i class="fa-solid fa-file-pdf ml-1"></i>PDF</button>
                             </div>
-                            <button type="button" onclick="printReportInvoice()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-100 rounded-xl text-xs font-bold border border-slate-700 shadow-sm transition-all"><i class="fa-solid fa-print ml-1"></i>طباعة الإيصال الرسمي</button>
+                            <button type="button" id="btn-print-invoice" data-i18n="btn-print-report" onclick="printReportInvoice()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-100 rounded-xl text-xs font-bold border border-slate-700 shadow-sm transition-all"><i class="fa-solid fa-print ml-1"></i>طباعة الإيصال الرسمي</button>
                         </div>
                     </div>
 
@@ -1941,6 +1943,29 @@
                     if (translations[lang] && translations[lang][key]) element.innerText = translations[lang][key];
                 });
 
+                // Ensure specific report elements are updated even if they were set dynamically
+                try {
+                    const rptTitle = document.getElementById('report-results-title');
+                    if (rptTitle) rptTitle.innerText = translations[lang]['reports-preview-title'] || translations[lang]['reports-title'] || rptTitle.innerText;
+
+                    const rptDesc = document.querySelector('#report-settlement-preview-box p');
+                    if (rptDesc) rptDesc.innerText = translations[lang]['reports-preview-desc'] || rptDesc.innerText;
+
+                    const btnSettleExcel = document.getElementById('btn-settle-excel');
+                    if (btnSettleExcel) btnSettleExcel.innerText = (translations[lang]['btn-settle-excel'] || btnSettleExcel.innerText);
+                    const btnSettlePdf = document.getElementById('btn-settle-pdf');
+                    if (btnSettlePdf) btnSettlePdf.innerText = (translations[lang]['btn-settle-pdf'] || btnSettlePdf.innerText);
+                    const btnPrintInv = document.getElementById('btn-print-invoice');
+                    if (btnPrintInv) btnPrintInv.innerText = (translations[lang]['btn-print-report'] || btnPrintInv.innerText);
+
+                    const compTitle = document.querySelector('#report-company-closing-box h4');
+                    if (compTitle) compTitle.innerText = translations[lang]['company-closing-title'] || compTitle.innerText;
+                    const compDesc = document.querySelector('#report-company-closing-box p');
+                    if (compDesc) compDesc.innerText = translations[lang]['company-closing-desc'] || compDesc.innerText;
+                } catch (e) {
+                    console.warn('applyLanguage (reports extras) failed', e);
+                }
+
                 updateOwnersDropdown(allOwners);
                 updateContractsDropdowns();
                 updateExpensesDropdowns();
@@ -2002,11 +2027,21 @@
             const mobileDrawer = document.getElementById('mobile-drawer');
             const mobileDrawerClose = document.getElementById('mobile-drawer-close');
             if (mobileMenuBtn && mobileDrawer) {
+                const mobileBackdrop = document.getElementById('mobile-drawer-backdrop');
+                function closeMobileDrawer() {
+                    mobileDrawer.classList.remove('open');
+                    if (mobileBackdrop) mobileBackdrop.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
                 mobileMenuBtn.addEventListener('click', () => {
                     mobileDrawer.classList.add('open');
+                    if (mobileBackdrop) mobileBackdrop.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
                 });
-                if (mobileDrawerClose) mobileDrawerClose.addEventListener('click', () => mobileDrawer.classList.remove('open'));
-                mobileDrawer.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => mobileDrawer.classList.remove('open')));
+                if (mobileDrawerClose) mobileDrawerClose.addEventListener('click', closeMobileDrawer);
+                if (mobileBackdrop) mobileBackdrop.addEventListener('click', closeMobileDrawer);
+                mobileDrawer.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', closeMobileDrawer));
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileDrawer(); });
             }
 
             // 4. قراءة الملاك لايف
