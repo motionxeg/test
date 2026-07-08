@@ -88,9 +88,13 @@
     /* Mobile improvements */
     @media (max-width: 768px) {
         .overflow-x-auto { -webkit-overflow-scrolling: touch; }
-        table th, table td { white-space: normal !important; word-break: break-word !important; }
         .tab-content { padding-bottom: 1rem; }
         #mobile-bottom-nav { padding-bottom: env(safe-area-inset-bottom); }
+        /* mobile typography and text-flow improvements */
+        body { font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        /* prevent Arabic words from being broken into letters on small screens */
+        [dir="rtl"] table th, [dir="rtl"] table td, [dir="rtl"] .overflow-x-auto, [dir="rtl"] .tab-content { word-break: keep-all; hyphens: none; }
+        input, select, button, textarea { font-family: inherit; font-size: 13px; }
     }
 
     /* Mobile drawer (hidden by default, slides in) */
