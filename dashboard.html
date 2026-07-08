@@ -268,7 +268,7 @@
     <!-- Backdrop for mobile drawer -->
     <div id="mobile-drawer-backdrop" class="hidden md:hidden fixed inset-0 bg-black/40 z-40"></div>
 
-    <div class="flex-1 flex flex-col overflow-y-auto">
+    <div class="flex-1 flex flex-col">
         
         <header class="px-8 py-6 flex items-center justify-between border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <div class="flex items-center space-x-6 space-x-reverse">
@@ -300,7 +300,7 @@
                             <span class="font-bold text-sm" data-i18n="title-notifications">التنبيهات</span>
                             <span class="text-xs text-blue-500 cursor-pointer hover:underline" id="refresh-alerts-btn" data-i18n="btn-refresh-alerts">تحديث</span>
                         </div>
-                        <div class="max-h-64 overflow-y-auto divide-y divide-gray-100 dark:divide-slate-800/60" id="alert-list-container">
+                        <div class="divide-y divide-gray-100 dark:divide-slate-800/60" id="alert-list-container">
                             <div class="p-4 text-center text-xs text-slate-400">لا يوجد تنبيهات حالياً.</div>
                         </div>
                     </div>
@@ -422,7 +422,7 @@
                             <h3 class="font-bold text-slate-800 dark:text-white text-base"><i class="fa-solid fa-triangle-exclamation text-rose-500 ml-2"></i><span data-i18n="dashboard-alerts-title">لوحة التنبيهات الفورية</span></h3>
                             <p class="text-xs text-slate-400 mt-0.5" data-i18n="dashboard-alerts-desc">تحديث تلقائي لأهم التحذيرات التشغيلية والمالية</p>
                         </div>
-                        <div class="space-y-3 max-h-80 overflow-y-auto pr-1" id="dashboard-alerts-list">
+                        <div class="space-y-3 pr-1" id="dashboard-alerts-list">
                             <div class="text-center text-xs py-8 text-slate-400">لا يوجد تنبيهات عاجلة.</div>
                         </div>
                     </div>
@@ -672,7 +672,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-4 max-h-[85vh] overflow-y-auto">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-4">
                         <h3 id="contract-form-title" class="font-bold text-slate-700 dark:text-slate-300 text-sm border-b border-gray-100 dark:border-slate-800 pb-2" data-i18n="contract-form-title-add">إنشاء عقد جديد</h3>
                         
                         <form id="contract-form" class="space-y-4">
@@ -1419,7 +1419,7 @@
                         <span class="font-bold text-sm text-slate-800 dark:text-white" data-i18n="search-modal-title">نتائج البحث الشامل</span>
                         <button id="close-search-modal" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
                     </div>
-                    <div class="p-4 overflow-y-auto space-y-4 flex-1 text-sm text-right" id="search-modal-results-container">
+                    <div class="p-4 space-y-4 flex-1 text-sm text-right" id="search-modal-results-container">
                         <!-- Results divided by categories -->
                     </div>
                 </div>
