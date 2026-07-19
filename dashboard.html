@@ -394,6 +394,11 @@
         #contracts-mobile-list .contract-empty { padding: 2.5rem 1rem; color: #94a3b8; text-align: center; font-size: .8rem; }
         #search-contracts { min-height: 2.85rem; }
         #contracts-month-filter { min-height: 2.85rem; }
+
+        /* Remove desktop-only spacing and the duplicated contracts heading on phones. */
+        main { padding-top: .5rem !important; }
+        main > .tab-content { margin-top: 0 !important; }
+        #tab-contracts > div:first-child { display: none; }
     }
     </style>
 </head>
