@@ -243,6 +243,12 @@
         /* Compact, thumb-friendly mobile shell */
         body { min-width: 320px; background: #f8fafc; }
         #main-content { margin: 0 !important; min-height: 100dvh; }
+        [dir="rtl"] #main-content,
+        [dir="ltr"] #main-content {
+            width: 100% !important;
+            margin-right: 0 !important;
+            margin-left: 0 !important;
+        }
         #main-content > header {
             position: sticky;
             top: 0;
