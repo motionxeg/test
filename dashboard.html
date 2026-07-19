@@ -208,6 +208,13 @@
     #mobile-drawer { transition: transform 250ms ease-in-out; }
     #mobile-drawer.open { transform: translateX(0) !important; }
     @media (max-width: 768px) {
+        :root {
+            --mobile-page-bg: linear-gradient(180deg, #f8fafc 0%, #eef2ff 42%, #f8fafc 100%);
+            --mobile-card-radius: 18px;
+            --mobile-card-border: rgba(203, 213, 225, 0.75);
+            --mobile-card-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+        }
+
         html,
         body {
             height: auto !important;
@@ -257,6 +264,7 @@
             max-width: 100% !important;
             padding: 8px 10px 172px !important;
             margin: 0 !important;
+            background: var(--mobile-page-bg);
         }
 
         .tab-content,
@@ -286,9 +294,11 @@
         .tab-content .mobile-ui-card,
         .tab-content .mobile-table-controls-card {
             background: #ffffff !important;
-            border: 1px solid rgba(226, 232, 240, 0.9) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
+            border: 1px solid var(--mobile-card-border) !important;
+            border-radius: var(--mobile-card-radius) !important;
+            box-shadow: var(--mobile-card-shadow) !important;
+            padding: 12px !important;
+            backdrop-filter: blur(6px);
         }
 
         .dark .tab-content .mobile-ui-card,
@@ -299,8 +309,7 @@
         }
 
         .tab-content .mobile-table-controls-card {
-            margin-bottom: 8px;
-            padding: 10px 12px !important;
+            margin-bottom: 10px;
         }
 
         /* Tables must be page-level, full-width, without card wrappers */
@@ -402,6 +411,104 @@
             color: #64748b;
             margin-bottom: 3px;
             font-weight: 700;
+        }
+
+        /* Page-level mobile redesign: dashboard */
+        #tab-dashboard .mobile-ui-card {
+            border-radius: 20px !important;
+        }
+
+        #tab-dashboard .mobile-ui-card .text-3xl,
+        #tab-dashboard .mobile-ui-card .text-2xl {
+            font-size: 1.4rem !important;
+            line-height: 1.25 !important;
+        }
+
+        /* Page-level mobile redesign: entity management pages */
+        #tab-owners .mobile-ui-card,
+        #tab-cars .mobile-ui-card,
+        #tab-customers .mobile-ui-card,
+        #tab-contracts .mobile-ui-card,
+        #tab-payments .mobile-ui-card,
+        #tab-expenses .mobile-ui-card,
+        #tab-safe .mobile-ui-card,
+        #tab-settings .mobile-ui-card,
+        #tab-vehicle-tracking .mobile-ui-card {
+            border-top: 3px solid rgba(37, 99, 235, 0.24) !important;
+        }
+
+        #tab-owners form,
+        #tab-cars form,
+        #tab-customers form,
+        #tab-contracts form,
+        #tab-payments form,
+        #tab-expenses form,
+        #tab-safe form,
+        #tab-settings form,
+        #tab-vehicle-tracking form {
+            display: grid !important;
+            gap: 9px !important;
+        }
+
+        /* Page-level mobile redesign: tables */
+        #tab-owners .mobile-table-host,
+        #tab-cars .mobile-table-host,
+        #tab-customers .mobile-table-host,
+        #tab-contracts .mobile-table-host,
+        #tab-payments .mobile-table-host,
+        #tab-expenses .mobile-table-host,
+        #tab-safe .mobile-table-host,
+        #tab-logs .mobile-table-host,
+        #tab-owner-dashboard .mobile-table-host,
+        #tab-client-dashboard .mobile-table-host,
+        #tab-vehicle-tracking .mobile-table-host {
+            background: rgba(255, 255, 255, 0.55) !important;
+            border-radius: 14px !important;
+            padding: 4px 0 !important;
+        }
+
+        #tab-owners table.mobile-list-table tr,
+        #tab-cars table.mobile-list-table tr,
+        #tab-customers table.mobile-list-table tr,
+        #tab-contracts table.mobile-list-table tr,
+        #tab-payments table.mobile-list-table tr,
+        #tab-expenses table.mobile-list-table tr,
+        #tab-safe table.mobile-list-table tr,
+        #tab-logs table.mobile-list-table tr,
+        #tab-owner-dashboard table.mobile-list-table tr,
+        #tab-client-dashboard table.mobile-list-table tr,
+        #tab-vehicle-tracking table.mobile-list-table tr {
+            background: #ffffff !important;
+            border: 1px solid rgba(226, 232, 240, 0.9) !important;
+            border-radius: 12px !important;
+            margin-bottom: 8px !important;
+            padding: 8px 6px !important;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
+        }
+
+        /* Page-level mobile redesign: reports */
+        #tab-reports .mobile-ui-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+            border-style: dashed !important;
+        }
+
+        #tab-reports #print-invoice-area,
+        #tab-reports #report-settlement-preview-box {
+            border-radius: 16px !important;
+            overflow: hidden;
+        }
+
+        /* Page-level mobile redesign: personal dashboards */
+        #tab-owner-dashboard .mobile-ui-card,
+        #tab-client-dashboard .mobile-ui-card {
+            border-radius: 20px !important;
+            background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%) !important;
+        }
+
+        #tab-owner-dashboard .mobile-ui-card .text-2xl,
+        #tab-client-dashboard .mobile-ui-card .text-2xl {
+            font-size: 1.25rem !important;
+            line-height: 1.3 !important;
         }
 
         .tab-content .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px !important; }
@@ -3413,66 +3520,92 @@
                 return document.querySelector('.tab-content.active');
             }
 
+            const MOBILE_TAB_BLUEPRINTS = {
+                'tab-dashboard': {
+                    cardAnchorIds: ['dashboard-filter-month', 'dashboard-filter-year', 'stat-period-contracts', 'stat-period-revenues', 'stat-period-expenses', 'stat-period-profit', 'stat-period-cars', 'stat-period-customers', 'dashboard-alerts-list', 'dashboard-financials-chart'],
+                    tableIds: []
+                },
+                'tab-owners': { cardAnchorIds: ['owner-form', 'search-owners'], tableIds: ['owners-table'] },
+                'tab-cars': { cardAnchorIds: ['car-form', 'search-cars'], tableIds: ['cars-table'] },
+                'tab-vehicle-tracking': { cardAnchorIds: ['vehicle-tracking-form', 'search-vehicle-tracking', 'tracking-viewer-box'], tableIds: ['vehicle-tracking-table'] },
+                'tab-customers': { cardAnchorIds: ['customer-form', 'search-customers', 'filter-debtors', 'total-debts-value'], tableIds: ['customers-table'] },
+                'tab-contracts': { cardAnchorIds: ['contract-form', 'search-contracts', 'contracts-month-filter'], tableIds: ['contracts-table'] },
+                'tab-payments': { cardAnchorIds: ['payment-form', 'search-payments'], tableIds: ['payments-table'] },
+                'tab-expenses': { cardAnchorIds: ['expense-form', 'search-expenses'], tableIds: ['expenses-table'] },
+                'tab-reports': { cardAnchorIds: ['report-type-select', 'report-filter-box', 'report-company-closing-box', 'report-settlement-preview-box', 'print-invoice-area'], tableIds: [] },
+                'tab-safe': { cardAnchorIds: ['safe-commission-total', 'safe-commission-received', 'safe-commission-pending', 'safe-form', 'safe-export-excel'], tableIds: ['safe-table'] },
+                'tab-logs': { cardAnchorIds: ['search-logs'], tableIds: ['logs-table'] },
+                'tab-owner-dashboard': { cardAnchorIds: ['owner-stat-cars', 'owner-stat-contracts', 'owner-stat-revenues', 'owner-stat-profit'], tableIds: ['owner-cars-table', 'owner-contracts-table'] },
+                'tab-client-dashboard': { cardAnchorIds: ['client-stat-contracts', 'client-stat-paid', 'client-stat-rest', 'client-stat-fines'], tableIds: ['client-contracts-table'] },
+                'tab-settings': { cardAnchorIds: ['user-mgt-form', 'btn-reset-database'], tableIds: ['users-table'] }
+            };
+
+            function closestMobileCardContainer(el, activeTab) {
+                if (!el || !activeTab) return null;
+                const candidate = el.closest('.bg-white, .rounded-2xl, .rounded-3xl, .rounded-\[28px\], .shadow-sm, .shadow-lg, .shadow-xl, .shadow-2xl, .border');
+                if (!candidate) return null;
+                if (!activeTab.contains(candidate)) return null;
+                return candidate;
+            }
+
+            function markAsMobileCardByAnchorId(anchorId, activeTab) {
+                const anchor = document.getElementById(anchorId);
+                if (!anchor || !activeTab.contains(anchor)) return;
+                const card = closestMobileCardContainer(anchor, activeTab);
+                if (card) card.classList.add('mobile-ui-card');
+            }
+
+            function flattenMobileTableById(tableId, activeTab) {
+                const table = document.getElementById(tableId);
+                if (!table || !activeTab.contains(table)) return;
+
+                table.classList.add('mobile-list-table');
+
+                const headers = Array.from(table.querySelectorAll('thead th')).map((th) => (th.innerText || '').trim());
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach((row) => {
+                    const cells = row.querySelectorAll('td');
+                    cells.forEach((cell, index) => {
+                        if (!cell.hasAttribute('data-label')) {
+                            cell.setAttribute('data-label', headers[index] || 'Field');
+                        }
+                    });
+                });
+
+                const tableWrap = table.closest('.overflow-x-auto') || table;
+                const tableCard = closestMobileCardContainer(tableWrap, activeTab) || tableWrap;
+                if (!tableCard || !activeTab.contains(tableCard)) return;
+
+                tableCard.classList.add('mobile-table-host');
+                tableCard.classList.remove('mobile-ui-card');
+
+                Array.from(tableCard.children || []).forEach((child) => {
+                    child.classList.remove('mobile-table-controls-card');
+                    if (child.contains(table)) return;
+                    if (child.querySelector && child.querySelector('table')) return;
+                    if (child.querySelector && child.querySelector('input, select, button, label, .fa-magnifying-glass')) {
+                        child.classList.add('mobile-table-controls-card');
+                    }
+                });
+            }
+
             function enhanceActiveTabTablesForMobile() {
                 if (!isMobileViewport()) return;
                 const activeTab = getActiveTabContent();
                 if (!activeTab) return;
 
-                const blocks = activeTab.querySelectorAll('div, section, article, form, aside');
-                const isCardLike = (el) => {
-                    const cls = el.className || '';
-                    return /(bg-white|dark:bg-slate-900|rounded-|shadow|border)/.test(cls);
-                };
-
-                blocks.forEach((el) => {
+                activeTab.querySelectorAll('.mobile-ui-card, .mobile-table-host, .mobile-table-controls-card').forEach((el) => {
                     el.classList.remove('mobile-ui-card', 'mobile-table-host', 'mobile-table-controls-card');
-                    if (isCardLike(el) && !el.closest('#global-search-modal, #global-confirm-dialog, #global-prompt-dialog, #contract-settlement-modal')) {
-                        el.classList.add('mobile-ui-card');
-                    }
                 });
 
-                const tables = activeTab.querySelectorAll('table');
-                tables.forEach((table) => {
-                    if (table.closest('#global-search-modal, #global-confirm-dialog, #global-prompt-dialog, #contract-settlement-modal')) return;
-                    table.classList.add('mobile-list-table');
+                const blueprint = MOBILE_TAB_BLUEPRINTS[activeTab.id] || { cardAnchorIds: [], tableIds: [] };
 
-                    let host = table.parentElement;
-                    let cardHost = null;
-                    let overflowHost = null;
-                    while (host && host !== activeTab) {
-                        if (!overflowHost && host.classList && host.classList.contains('overflow-x-auto')) {
-                            overflowHost = host;
-                        }
-                        if (host.classList && (host.classList.contains('mobile-ui-card') || isCardLike(host))) {
-                            cardHost = host;
-                        }
-                        host = host.parentElement;
-                    }
+                (blueprint.cardAnchorIds || []).forEach((id) => {
+                    markAsMobileCardByAnchorId(id, activeTab);
+                });
 
-                    const finalHost = cardHost || overflowHost || table.parentElement;
-                    if (finalHost && finalHost !== activeTab) {
-                        finalHost.classList.add('mobile-table-host');
-                        finalHost.classList.remove('mobile-ui-card');
-
-                        Array.from(finalHost.children || []).forEach((child) => {
-                            child.classList.remove('mobile-table-controls-card');
-                            if (child.querySelector && !child.querySelector('table')) {
-                                child.classList.add('mobile-table-controls-card');
-                            }
-                        });
-                    }
-
-                    const headers = Array.from(table.querySelectorAll('thead th')).map((th) => (th.innerText || '').trim());
-                    const rows = table.querySelectorAll('tbody tr');
-                    rows.forEach((row) => {
-                        const cells = row.querySelectorAll('td');
-                        cells.forEach((cell, index) => {
-                            if (!cell.hasAttribute('data-label')) {
-                                const label = headers[index] || 'Field';
-                                cell.setAttribute('data-label', label);
-                            }
-                        });
-                    });
+                (blueprint.tableIds || []).forEach((tableId) => {
+                    flattenMobileTableById(tableId, activeTab);
                 });
             }
 
