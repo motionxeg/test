@@ -217,24 +217,10 @@
             scroll-behavior: smooth;
         }
 
-        /* Prevent table headers/values from collapsing into vertical single-letters by forcing horizontal scroll */
-        .overflow-x-auto table, .overflow-x-auto thead, .overflow-x-auto tbody, .overflow-x-auto tr { white-space: nowrap; }
-        .overflow-x-auto th, .overflow-x-auto td { white-space: nowrap; overflow: visible; }
-        /* increase bottom padding so mobile bottom nav doesn't cover content */
-        main { padding-bottom: 110px; }
-        /* hide large watermark on small screens */
         .watermark { display: none !important; }
-        /* make mobile drawer full height and comfortable width */
         #mobile-drawer { width: 86%; transform: translateX(-100%); }
         #mobile-drawer.open { transform: translateX(0); }
-        /* ensure bottom nav fits */
-        #mobile-bottom-nav > div { max-width: calc(100vw - 24px); }
-        /* increase table cell padding on mobile for readability */
-        .overflow-x-auto td, .overflow-x-auto th { padding: 12px !important; }
-        /* ensure horizontal writing and normal text flow */
-        .overflow-x-auto th, .overflow-x-auto td { writing-mode: horizontal-tb !important; transform: none !important; display: table-cell !important; }
 
-        /* Mobile-first content flow: full width, one column, no boxed cards */
         #main-content,
         [dir="rtl"] #main-content {
             margin-left: 0 !important;
@@ -269,8 +255,7 @@
         #main-content > main {
             width: 100% !important;
             max-width: 100% !important;
-            padding: 0 !important;
-            padding-bottom: 172px !important;
+            padding: 8px 10px 172px !important;
             margin: 0 !important;
         }
 
@@ -281,11 +266,6 @@
             max-width: 100% !important;
             margin-left: 0 !important;
             margin-right: 0 !important;
-        }
-
-        .tab-content,
-        .tab-content.active {
-            padding: 0 !important;
         }
 
         .tab-content .grid {
@@ -302,102 +282,50 @@
             grid-column: span 1 / span 1 !important;
         }
 
-        /* Remove card-like containers on mobile (normal pages only) */
-        .tab-content :is(div, section, article, form, header, footer, aside)[class*="bg-white"],
-        .tab-content :is(div, section, article, form, header, footer, aside)[class*="dark:bg-slate-900"] {
+        /* Hybrid mode: keep cards for forms/filters/stats/actions */
+        .tab-content .mobile-ui-card {
+            background: #ffffff !important;
+            border: 1px solid rgba(226, 232, 240, 0.9) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        .dark .tab-content .mobile-ui-card {
+            background: #0f172a !important;
+            border: 1px solid rgba(51, 65, 85, 0.8) !important;
+            box-shadow: 0 8px 22px rgba(2, 6, 23, 0.35) !important;
+        }
+
+        /* Tables must be page-level, full-width, without card wrappers */
+        .tab-content .mobile-table-host {
             background: transparent !important;
-        }
-
-        .tab-content :is(div, section, article, form, header, footer, aside)[class~="border"] {
-            border: none !important;
-        }
-
-        .tab-content :is(div, section, article, form, header, footer, aside)[class*="rounded-"] {
-            border-radius: 0 !important;
-        }
-
-        .tab-content :is(div, section, article, form, header, footer, aside)[class*="shadow"] {
-            box-shadow: none !important;
-        }
-
-        .tab-content .rounded-2xl.border,
-        .tab-content .rounded-3xl.border,
-        .tab-content .rounded-xl.border,
-        .tab-content .rounded-lg.border,
-        .tab-content .shadow-sm,
-        .tab-content .shadow-xl,
-        .tab-content .shadow-2xl {
             border: none !important;
             border-radius: 0 !important;
             box-shadow: none !important;
-            background: transparent !important;
-        }
-
-        /* Compact spacing for mobile readability */
-        .tab-content .p-8,
-        .tab-content .p-7,
-        .tab-content .p-6,
-        .tab-content .p-5,
-        .tab-content .p-4 {
-            padding: 8px 10px !important;
-
-        /* Mobile navigation: docked, thumb-friendly, always reachable */
-        #mobile-bottom-nav {
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            transform: none !important;
-            width: 100% !important;
-            padding: 6px 8px calc(env(safe-area-inset-bottom) + 8px) !important;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0));
-            backdrop-filter: blur(8px);
-        }
-
-        #mobile-bottom-nav > div {
+            padding: 0 !important;
+            margin: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
-            border-radius: 14px !important;
-            padding: 6px !important;
-            gap: 6px !important;
-            overflow-x: auto;
-            justify-content: flex-start;
+        }
+
+        .tab-content .mobile-table-host > .overflow-x-auto,
+        .tab-content .mobile-table-host .overflow-x-auto {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
 
-        #mobile-bottom-nav > div::-webkit-scrollbar { display: none; }
-
-        #mobile-bottom-nav .tab-btn {
-            min-width: 42px !important;
-            min-height: 42px !important;
-            border-radius: 10px !important;
-            flex: 0 0 auto;
-        }
-
-        /* Sticky mobile primary action */
-        #mobile-sticky-action-bar {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: calc(env(safe-area-inset-bottom) + 66px);
-            z-index: 45;
-            padding: 8px 12px;
-            background: linear-gradient(to top, rgba(248, 250, 252, 0.98), rgba(248, 250, 252, 0));
-        }
-
-        .dark #mobile-sticky-action-bar {
-            background: linear-gradient(to top, rgba(2, 6, 23, 0.98), rgba(2, 6, 23, 0));
-        }
-
-        #mobile-sticky-action-btn {
-            width: 100%;
-            min-height: 48px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            background: #2563eb;
-            color: #fff;
-            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+        .tab-content .mobile-table-host .p-4,
+        .tab-content .mobile-table-host .p-5,
+        .tab-content .mobile-table-host .p-6,
+        .tab-content .mobile-table-host .border-b {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
         }
 
         /* Per-page form optimization */
@@ -469,26 +397,11 @@
             font-weight: 700;
         }
 
-        /* Remove desktop-only hover behavior on touch screens */
-        .tab-content .hover\:bg-slate-800:hover,
-        .tab-content .hover\:bg-slate-100:hover,
-        .tab-content .hover\:bg-gray-100:hover,
-        .tab-content .hover\:bg-blue-700:hover,
-        .tab-content .hover\:bg-rose-700:hover,
-        .tab-content .hover\:text-white:hover,
-        .tab-content .hover\:text-slate-600:hover {
-            background: inherit !important;
-            color: inherit !important;
-        }
-        }
-
-        .tab-content .space-y-6 > :not([hidden]) ~ :not([hidden]) {
-            margin-top: 10px !important;
-        }
-
-        .tab-content .space-y-4 > :not([hidden]) ~ :not([hidden]) {
-            margin-top: 8px !important;
-        }
+        .tab-content .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px !important; }
+        .tab-content .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 8px !important; }
+        .tab-content .gap-6 { gap: 10px !important; }
+        .tab-content .gap-4,
+        .tab-content .gap-3 { gap: 8px !important; }
 
         .tab-content :is(h1, h2, h3, h4) {
             margin-top: 0 !important;
@@ -507,25 +420,79 @@
         }
 
         .tab-content .text-sm,
-        .tab-content .text-xs {
-            line-height: 1.45 !important;
+        .tab-content .text-xs { line-height: 1.45 !important; }
+
+        /* Mobile navigation: docked, thumb-friendly, always reachable */
+        #mobile-bottom-nav {
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            transform: none !important;
+            width: 100% !important;
+            padding: 6px 8px calc(env(safe-area-inset-bottom) + 8px) !important;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0));
+            backdrop-filter: blur(8px);
         }
 
-        .tab-content .gap-6 { gap: 10px !important; }
-        .tab-content .gap-4 { gap: 8px !important; }
-        .tab-content .gap-3 { gap: 8px !important; }
-
-        .tab-content .mb-6,
-        .tab-content .my-6 {
-            margin-bottom: 10px !important;
+        #mobile-bottom-nav > div {
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 14px !important;
+            padding: 6px !important;
+            gap: 6px !important;
+            overflow-x: auto;
+            justify-content: flex-start;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
 
-        .tab-content .mt-6,
-        .tab-content .my-6 {
-            margin-top: 10px !important;
+        #mobile-bottom-nav > div::-webkit-scrollbar { display: none; }
+
+        #mobile-bottom-nav .tab-btn {
+            min-width: 42px !important;
+            min-height: 42px !important;
+            border-radius: 10px !important;
+            flex: 0 0 auto;
         }
 
-        /* Touch targets */
+        /* Sticky mobile primary action */
+        #mobile-sticky-action-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: calc(env(safe-area-inset-bottom) + 66px);
+            z-index: 45;
+            padding: 8px 12px;
+            background: linear-gradient(to top, rgba(248, 250, 252, 0.98), rgba(248, 250, 252, 0));
+        }
+
+        .dark #mobile-sticky-action-bar {
+            background: linear-gradient(to top, rgba(2, 6, 23, 0.98), rgba(2, 6, 23, 0));
+        }
+
+        #mobile-sticky-action-btn {
+            width: 100%;
+            min-height: 48px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            background: #2563eb;
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+        }
+
+        /* Remove desktop-only hover behavior on touch screens */
+        .tab-content .hover\:bg-slate-800:hover,
+        .tab-content .hover\:bg-slate-100:hover,
+        .tab-content .hover\:bg-gray-100:hover,
+        .tab-content .hover\:bg-blue-700:hover,
+        .tab-content .hover\:bg-rose-700:hover,
+        .tab-content .hover\:text-white:hover,
+        .tab-content .hover\:text-slate-600:hover {
+            background: inherit !important;
+            color: inherit !important;
+        }
+
         .tab-content button,
         .tab-content input,
         .tab-content select,
@@ -3443,10 +3410,35 @@
                 if (!isMobileViewport()) return;
                 const activeTab = getActiveTabContent();
                 if (!activeTab) return;
+
+                const blocks = activeTab.querySelectorAll('div, section, article, form, aside');
+                const isCardLike = (el) => {
+                    const cls = el.className || '';
+                    return /(bg-white|dark:bg-slate-900|rounded-|shadow|border)/.test(cls);
+                };
+
+                blocks.forEach((el) => {
+                    el.classList.remove('mobile-ui-card', 'mobile-table-host');
+                    if (isCardLike(el) && !el.closest('#global-search-modal, #global-confirm-dialog, #global-prompt-dialog, #contract-settlement-modal')) {
+                        el.classList.add('mobile-ui-card');
+                    }
+                });
+
                 const tables = activeTab.querySelectorAll('table');
                 tables.forEach((table) => {
                     if (table.closest('#global-search-modal, #global-confirm-dialog, #global-prompt-dialog, #contract-settlement-modal')) return;
                     table.classList.add('mobile-list-table');
+
+                    let host = table.parentElement;
+                    while (host && host !== activeTab) {
+                        if (host.classList && (host.classList.contains('mobile-ui-card') || host.classList.contains('overflow-x-auto') || isCardLike(host))) {
+                            host.classList.add('mobile-table-host');
+                            host.classList.remove('mobile-ui-card');
+                            break;
+                        }
+                        host = host.parentElement;
+                    }
+
                     const headers = Array.from(table.querySelectorAll('thead th')).map((th) => (th.innerText || '').trim());
                     const rows = table.querySelectorAll('tbody tr');
                     rows.forEach((row) => {
