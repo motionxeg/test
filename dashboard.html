@@ -355,6 +355,45 @@
         html.lang-en #contracts-table td:nth-child(6)::before { content: 'Financials'; }
         html.lang-en #contracts-table td:nth-child(7)::before { content: 'Status'; }
         html.lang-en #contracts-table td:nth-child(8)::before { content: 'Actions'; }
+
+        /* Mobile-first contracts screen */
+        #contracts-table { display: none !important; }
+        #contracts-mobile-list { display: grid !important; gap: 0.75rem; padding-bottom: 1rem; }
+        #contracts-mobile-list .mobile-contract-card {
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, .18);
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, .86);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+        }
+        .dark #contracts-mobile-list .mobile-contract-card { background: rgba(15, 23, 42, .82); }
+        #contracts-mobile-list .contract-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .75rem;
+            padding: .8rem 1rem;
+            border-bottom: 1px solid rgba(148, 163, 184, .14);
+            background: rgba(248, 250, 252, .6);
+        }
+        .dark #contracts-mobile-list .contract-card-head { background: rgba(2, 6, 23, .22); }
+        #contracts-mobile-list .contract-card-body { padding: .9rem 1rem 1rem; }
+        #contracts-mobile-list .contract-customer { color: #0f172a; font-size: .95rem; font-weight: 800; }
+        .dark #contracts-mobile-list .contract-customer { color: #f8fafc; }
+        #contracts-mobile-list .contract-car { margin-top: .2rem; color: #2563eb; font-size: .78rem; font-weight: 700; }
+        #contracts-mobile-list .contract-dates { margin-top: .3rem; color: #94a3b8; font-size: .7rem; }
+        #contracts-mobile-list .contract-stats { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .85rem; }
+        #contracts-mobile-list .contract-stat { padding: .62rem .7rem; border-radius: .8rem; background: #f8fafc; }
+        .dark #contracts-mobile-list .contract-stat { background: rgba(2, 6, 23, .38); }
+        #contracts-mobile-list .contract-stat-label { display: block; color: #94a3b8; font-size: .62rem; font-weight: 700; }
+        #contracts-mobile-list .contract-stat-value { display: block; margin-top: .15rem; color: #334155; font-size: .75rem; font-weight: 800; }
+        .dark #contracts-mobile-list .contract-stat-value { color: #e2e8f0; }
+        #contracts-mobile-list .contract-money { display: flex; justify-content: space-between; gap: .75rem; margin-top: .7rem; padding-top: .7rem; border-top: 1px dashed rgba(148, 163, 184, .22); font-size: .72rem; }
+        #contracts-mobile-list .contract-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-top: .85rem; }
+        #contracts-mobile-list .contract-actions button { min-height: 2.25rem; padding: .4rem .55rem !important; border-radius: .65rem; }
+        #contracts-mobile-list .contract-empty { padding: 2.5rem 1rem; color: #94a3b8; text-align: center; font-size: .8rem; }
+        #search-contracts { min-height: 2.85rem; }
+        #contracts-month-filter { min-height: 2.85rem; }
     }
     </style>
 </head>
@@ -1175,6 +1214,8 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!-- A dedicated mobile list keeps contract data readable without squeezing a desktop table. -->
+                        <section id="contracts-mobile-list" class="md:hidden" aria-live="polite"></section>
                     </div>
                 </div>
             </div>
@@ -3192,6 +3233,7 @@
             const contractAmountPaidInput = document.getElementById('contract-amount-paid');
             const contractAmountRestInput = document.getElementById('contract-amount-rest');
             const contractsTableBody = document.getElementById('contracts-table-body');
+            const contractsMobileList = document.getElementById('contracts-mobile-list');
             const searchContractsInput = document.getElementById('search-contracts');
             const contractMonthFilter = document.getElementById('contracts-month-filter');
             let allContracts = [];
@@ -4691,8 +4733,7 @@
                 allContracts = [];
                 totalPendingRevenues = 0;
                 if(snapshot.empty) {
-                    const currentLang = localStorage.getItem('lang') || 'ar';
-                    if (contractsTableBody) contractsTableBody.innerHTML = `<tr><td colspan="8" class="p-8 text-slate-400 text-center">${t('empty-no-contracts')}</td></tr>`;
+                    renderContractsTable([]);
                     const statEl = document.getElementById('stat-contracts-count');
                     if (statEl) statEl.innerText = 0;
                     updateFinanceDashboard();
@@ -4716,6 +4757,7 @@
                 console.error("Contracts load error:", error);
                 const currentLang = localStorage.getItem('lang') || 'ar';
                 if (contractsTableBody) contractsTableBody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-rose-500">${currentLang === 'en' ? 'Failed to load contracts data.' : 'فشل تحميل بيانات العقود.'}</td></tr>`;
+                if (contractsMobileList) contractsMobileList.innerHTML = `<div class="contract-empty text-rose-500">${currentLang === 'en' ? 'Failed to load contracts data.' : 'فشل تحميل بيانات العقود.'}</div>`;
                 const statEl = document.getElementById('stat-contracts-count');
                 if (statEl) statEl.innerText = 0;
             });
@@ -4749,8 +4791,9 @@
             });
 
             function renderContractsTable(data) {
-                if(!contractsTableBody) return;
-                contractsTableBody.innerHTML = '';
+                if(!contractsTableBody && !contractsMobileList) return;
+                if (contractsTableBody) contractsTableBody.innerHTML = '';
+                if (contractsMobileList) contractsMobileList.innerHTML = '';
                 const currentLang = localStorage.getItem('lang') || 'ar';
                 const selectedMonth = contractMonthFilter?.value || getCurrentContractMonthKey();
                 const searchQuery = (searchContractsInput?.value || '').trim().toLowerCase();
@@ -4770,7 +4813,8 @@
                 });
 
                 if (filteredData.length === 0) {
-                    contractsTableBody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 dark:text-slate-600">${t('empty-no-contracts-month')}</td></tr>`;
+                    if (contractsTableBody) contractsTableBody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400 dark:text-slate-600">${t('empty-no-contracts-month')}</td></tr>`;
+                    if (contractsMobileList) contractsMobileList.innerHTML = `<div class="contract-empty">${t('empty-no-contracts-month')}</div>`;
                     return;
                 }
 
@@ -4846,7 +4890,38 @@
                             <div class="inline-flex items-center justify-center gap-1 rtl:space-x-reverse">${actionButtons}</div>
                         </td>
                     `;
-                    contractsTableBody.appendChild(tr);
+                    if (contractsTableBody) contractsTableBody.appendChild(tr);
+
+                    if (contractsMobileList) {
+                        const mobileCard = document.createElement('article');
+                        mobileCard.className = 'mobile-contract-card';
+                        mobileCard.innerHTML = `
+                            <div class="contract-card-head">
+                                <span class="font-mono text-[11px] font-bold text-slate-400">#${cont.serial}</span>
+                                ${statusBadge}
+                            </div>
+                            <div class="contract-card-body">
+                                <div class="contract-customer">${custName}</div>
+                                <div class="contract-car"><i class="fa-solid fa-car ml-1"></i>${carName}</div>
+                                <div class="contract-dates">${contractDateText}</div>
+                                <div class="contract-stats">
+                                    <div class="contract-stat">
+                                        <span class="contract-stat-label">${currentLang === 'en' ? 'Duration' : 'المدة'}</span>
+                                        <span class="contract-stat-value">${durationText}</span>
+                                    </div>
+                                    <div class="contract-stat">
+                                        <span class="contract-stat-label">${currentLang === 'en' ? 'Odometer' : 'العداد'}</span>
+                                        <span class="contract-stat-value">${counterText}</span>
+                                    </div>
+                                </div>
+                                <div class="contract-money">
+                                    <span class="text-slate-400">${currentLang === 'en' ? 'Paid' : 'المدفوع'}: <b class="text-emerald-500">${cont.amountPaid}</b></span>
+                                    <span class="text-slate-400">${currentLang === 'en' ? 'Rest' : 'المتبقي'}: <b class="text-rose-500">${cont.amountRest}</b></span>
+                                </div>
+                                <div class="contract-actions">${actionButtons}</div>
+                            </div>`;
+                        contractsMobileList.appendChild(mobileCard);
+                    }
                 });
 
                 document.querySelectorAll('.btn-cont-edit').forEach(b => b.addEventListener('click', () => handleEditContract(b.dataset.id)));
