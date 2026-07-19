@@ -283,17 +283,24 @@
         }
 
         /* Hybrid mode: keep cards for forms/filters/stats/actions */
-        .tab-content .mobile-ui-card {
+        .tab-content .mobile-ui-card,
+        .tab-content .mobile-table-controls-card {
             background: #ffffff !important;
             border: 1px solid rgba(226, 232, 240, 0.9) !important;
             border-radius: 16px !important;
             box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
         }
 
-        .dark .tab-content .mobile-ui-card {
+        .dark .tab-content .mobile-ui-card,
+        .dark .tab-content .mobile-table-controls-card {
             background: #0f172a !important;
             border: 1px solid rgba(51, 65, 85, 0.8) !important;
             box-shadow: 0 8px 22px rgba(2, 6, 23, 0.35) !important;
+        }
+
+        .tab-content .mobile-table-controls-card {
+            margin-bottom: 8px;
+            padding: 10px 12px !important;
         }
 
         /* Tables must be page-level, full-width, without card wrappers */
@@ -3418,7 +3425,7 @@
                 };
 
                 blocks.forEach((el) => {
-                    el.classList.remove('mobile-ui-card', 'mobile-table-host');
+                    el.classList.remove('mobile-ui-card', 'mobile-table-host', 'mobile-table-controls-card');
                     if (isCardLike(el) && !el.closest('#global-search-modal, #global-confirm-dialog, #global-prompt-dialog, #contract-settlement-modal')) {
                         el.classList.add('mobile-ui-card');
                     }
@@ -3430,13 +3437,29 @@
                     table.classList.add('mobile-list-table');
 
                     let host = table.parentElement;
+                    let cardHost = null;
+                    let overflowHost = null;
                     while (host && host !== activeTab) {
-                        if (host.classList && (host.classList.contains('mobile-ui-card') || host.classList.contains('overflow-x-auto') || isCardLike(host))) {
-                            host.classList.add('mobile-table-host');
-                            host.classList.remove('mobile-ui-card');
-                            break;
+                        if (!overflowHost && host.classList && host.classList.contains('overflow-x-auto')) {
+                            overflowHost = host;
+                        }
+                        if (host.classList && (host.classList.contains('mobile-ui-card') || isCardLike(host))) {
+                            cardHost = host;
                         }
                         host = host.parentElement;
+                    }
+
+                    const finalHost = cardHost || overflowHost || table.parentElement;
+                    if (finalHost && finalHost !== activeTab) {
+                        finalHost.classList.add('mobile-table-host');
+                        finalHost.classList.remove('mobile-ui-card');
+
+                        Array.from(finalHost.children || []).forEach((child) => {
+                            child.classList.remove('mobile-table-controls-card');
+                            if (child.querySelector && !child.querySelector('table')) {
+                                child.classList.add('mobile-table-controls-card');
+                            }
+                        });
                     }
 
                     const headers = Array.from(table.querySelectorAll('thead th')).map((th) => (th.innerText || '').trim());
