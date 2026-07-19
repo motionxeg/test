@@ -242,7 +242,7 @@
         #main-content > main {
             width: 100% !important;
             max-width: 100% !important;
-            padding: 12px !important;
+            padding: 0 !important;
             padding-bottom: 110px !important;
             margin: 0 !important;
         }
@@ -256,26 +256,50 @@
             margin-right: 0 !important;
         }
 
-        #main-content .grid {
+        .tab-content,
+        .tab-content.active {
+            padding: 0 !important;
+        }
+
+        .tab-content .grid {
             grid-template-columns: minmax(0, 1fr) !important;
             gap: 12px !important;
         }
 
-        #main-content .xl\:col-span-2,
-        #main-content .xl\:col-span-3,
-        #main-content .md\:col-span-2,
-        #main-content .md\:col-span-3,
-        #main-content .lg\:col-span-2,
-        #main-content .lg\:col-span-3 {
+        .tab-content .xl\:col-span-2,
+        .tab-content .xl\:col-span-3,
+        .tab-content .md\:col-span-2,
+        .tab-content .md\:col-span-3,
+        .tab-content .lg\:col-span-2,
+        .tab-content .lg\:col-span-3 {
             grid-column: span 1 / span 1 !important;
         }
 
-        /* Remove card-like containers on mobile */
-        #main-content .rounded-2xl.border,
-        #main-content .rounded-3xl.border,
-        #main-content .shadow-sm,
-        #main-content .shadow-xl,
-        #main-content .shadow-2xl {
+        /* Remove card-like containers on mobile (normal pages only) */
+        .tab-content :is(div, section, article, form, header, footer, aside)[class*="bg-white"],
+        .tab-content :is(div, section, article, form, header, footer, aside)[class*="dark:bg-slate-900"] {
+            background: transparent !important;
+        }
+
+        .tab-content :is(div, section, article, form, header, footer, aside)[class~="border"] {
+            border: none !important;
+        }
+
+        .tab-content :is(div, section, article, form, header, footer, aside)[class*="rounded-"] {
+            border-radius: 0 !important;
+        }
+
+        .tab-content :is(div, section, article, form, header, footer, aside)[class*="shadow"] {
+            box-shadow: none !important;
+        }
+
+        .tab-content .rounded-2xl.border,
+        .tab-content .rounded-3xl.border,
+        .tab-content .rounded-xl.border,
+        .tab-content .rounded-lg.border,
+        .tab-content .shadow-sm,
+        .tab-content .shadow-xl,
+        .tab-content .shadow-2xl {
             border: none !important;
             border-radius: 0 !important;
             box-shadow: none !important;
@@ -283,25 +307,27 @@
         }
 
         /* Compact spacing for mobile readability */
-        #main-content .p-6,
-        #main-content .p-5,
-        #main-content .p-4 {
-            padding: 12px !important;
+        .tab-content .p-8,
+        .tab-content .p-7,
+        .tab-content .p-6,
+        .tab-content .p-5,
+        .tab-content .p-4 {
+            padding: 10px 12px !important;
         }
 
-        #main-content .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+        .tab-content .space-y-6 > :not([hidden]) ~ :not([hidden]) {
             margin-top: 12px !important;
         }
 
-        #main-content .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+        .tab-content .space-y-4 > :not([hidden]) ~ :not([hidden]) {
             margin-top: 10px !important;
         }
 
         /* Touch targets */
-        #main-content button,
-        #main-content input,
-        #main-content select,
-        #main-content textarea {
+        .tab-content button,
+        .tab-content input,
+        .tab-content select,
+        .tab-content textarea {
             min-height: 44px;
             font-size: 14px !important;
         }
